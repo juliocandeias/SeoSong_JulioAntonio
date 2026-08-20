@@ -1,0 +1,9 @@
+package repositories;
+import org.springframework.stereotype.*;
+import org.springframework.data.jpa.repository.*;
+import entity.Music;
+
+@Repository
+public interface Music_Repository extends JpaRepository<Music,Long> {
+
+}

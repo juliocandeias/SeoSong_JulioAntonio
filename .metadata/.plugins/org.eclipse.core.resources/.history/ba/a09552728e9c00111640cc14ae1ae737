@@ -1,0 +1,14 @@
+package Entity;
+import jakarta.persistence.*;
+
+@Entity
+@Table (name = "User")
+public class User {
+
+@Id
+@Column (name = "id_user")
+private int id_user;
+
+@Column (name = "emaial")
+private String email;
+}

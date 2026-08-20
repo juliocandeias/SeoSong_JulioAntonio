@@ -1,0 +1,13 @@
+package entity;
+import jakarta.persistence.*;
+
+public class Music {
+	@Id
+	@Column (name = "id_music")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id_music;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_artist", nullable = false)
+	private int id_artist;
+}

@@ -1,0 +1,10 @@
+package repositories;
+import org.springframework.stereotype.*;
+
+import entities.User;
+
+import org.springframework.data.jpa.repository.*;
+
+@Repository
+public interface User_Repository extends JpaRepository<User,Long>
+{}

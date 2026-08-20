@@ -1,0 +1,6 @@
+package Entity;
+import jakarta.persistence.*;
+
+public class User {
+
+}

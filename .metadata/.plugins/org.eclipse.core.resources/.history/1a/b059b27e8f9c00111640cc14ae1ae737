@@ -1,0 +1,32 @@
+package Entity;
+import java.sql.Date;
+
+import jakarta.persistence.*;
+
+@Entity
+@Table (name = "User")
+public class User {
+
+@Id
+@Column (name = "id_user")
+private int id_user;
+
+@Column (name = "email")
+private String email;
+
+@Column (name = "password")
+private String password;
+
+@Column (name = "name")
+private String name;
+
+@Column (name = "birthday")
+private Date birthday;
+
+@Column (name = "cep")
+private String cep;
+
+@Lob
+@Column (name = "photo")
+private byte[] photo;
+}

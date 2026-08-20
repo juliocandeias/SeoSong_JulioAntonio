@@ -1,0 +1,10 @@
+package entity;
+import jakarta.persistence.*;
+
+public class Music {
+	@Id
+	@Column (name = "id_music")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id_music;
+
+}

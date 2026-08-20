@@ -1,0 +1,6 @@
+package Entity;
+import org.springframework.*;
+
+public class User {
+
+}
