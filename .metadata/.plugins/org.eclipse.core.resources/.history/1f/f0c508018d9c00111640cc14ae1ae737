@@ -1,7 +1,0 @@
-package Entity;
-import org.springframework.web.bind.annotation.*;
-
-@Table
-public class User {
-
-}

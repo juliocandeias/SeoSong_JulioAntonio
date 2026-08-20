@@ -1,4 +1,0 @@
-spring.application.name=seosong
-
-spring.datasource.url=jdbc:postgresql://localhost:5432?seosong
-spring.datasource.

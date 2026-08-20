@@ -1,7 +1,0 @@
-package repository;
-import org.springframework.*;
-
-@Repository
-public interface User_Repository {
-
-}
