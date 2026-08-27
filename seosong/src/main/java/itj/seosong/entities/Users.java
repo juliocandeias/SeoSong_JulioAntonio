@@ -1,5 +1,5 @@
 package itj.seosong.entities;
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -38,7 +38,7 @@ private String password;
 private String name;
 
 @Column (name = "birth_date")
-private Date birthdate;
+private LocalDate birthdate;
 
 @Column (name = "cep",length = 9)
 private String cep;
