@@ -7,7 +7,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -43,4 +46,12 @@ private String cep;
 @Lob
 @Column (name = "photo")
 private byte[] photo;
+
+@ManyToMany
+@JoinTable(
+		name = "favorites",
+		joinColumns = @JoinColumn(name = "Users_id"),
+		inverseJoinColumns = @JoinColumn(name = "Music_id")
+		)
+private List<Music> music; 
 }

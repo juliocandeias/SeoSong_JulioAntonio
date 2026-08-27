@@ -24,6 +24,9 @@ public class Music {
 	private Long id_music;
 	
 	@ManyToMany(mappedBy = "music")
+	private List<Users> users;
+	
+	@ManyToMany(mappedBy = "music")
 	private List<Playlist> playlist;
 	
 	@ManyToOne
