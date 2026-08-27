@@ -33,7 +33,7 @@ public class Artist {
 	@Column (name = "photo")
 	private byte[] photo;
 	
-	@OneToMany(mappedBy = "Music")
+	@OneToMany(mappedBy = "artist")
 	private List<Music> music;
 
 }

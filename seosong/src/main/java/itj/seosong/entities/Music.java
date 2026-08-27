@@ -23,11 +23,11 @@ public class Music {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_music;
 	
-	@ManyToMany(mappedBy = "Playlist")
+	@ManyToMany(mappedBy = "music")
 	private List<Playlist> playlist;
 	
 	@ManyToOne
-	@JoinColumn(name = "id_artist", nullable=false)
+	@JoinColumn(name = "id_Artist", nullable=false)
 	private Artist artist;
 	
 	@Column (name = "album")

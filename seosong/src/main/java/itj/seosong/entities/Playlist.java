@@ -35,9 +35,9 @@ public class Playlist {
 	
 	@ManyToMany
 	@JoinTable(
-			name = "Music/Playlist",
+			name = "music_playlist",
 			joinColumns = @JoinColumn(name = "Playlist_id"),
 			inverseJoinColumns = @JoinColumn(name = "Music_id")
 			)
-	private List<Music> Music; 
+	private List<Music> music; 
 }
