@@ -1,10 +1,9 @@
 package itj.seosong.repositories;
 import org.springframework.stereotype.Repository;
-
-import itj.seosong.entities.Users;
-
 import org.springframework.data.jpa.repository.*;
+import itj.seosong.entities.Playlist;
 
 @Repository
-public interface User_Repository extends JpaRepository<Users,Long>
-{}
+public interface Playlist_Repository extends JpaRepository<Playlist,Long> {
+
+}
