@@ -1,6 +1,7 @@
 package itj.seosong.entities;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,5 +32,8 @@ public class Artist {
 	@Lob
 	@Column (name = "photo")
 	private byte[] photo;
+	
+	@OneToMany(mappedBy = "Music")
+	private List<Music> music;
 
 }
