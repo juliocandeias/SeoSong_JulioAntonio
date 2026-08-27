@@ -1,5 +1,6 @@
 package itj.seosong.entities;
 import java.time.Year;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,7 +9,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 
@@ -21,6 +22,9 @@ public class Music {
 	@Column (name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_music;
+	
+	@ManyToMany(mappedBy = "Playlist")
+	private List<Playlist> playlist;
 	
 	@Column (name = "album")
 	private String album;

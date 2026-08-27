@@ -1,11 +1,17 @@
 package itj.seosong.entities;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,9 +25,19 @@ public class Playlist {
 	@Column (name = "name")
 	private String name;
 	
-	private Long id_users;
+	@ManyToOne
+	@JoinColumn(name = "id_users", nullable=false)
+	private Users users;
 	
 	@Lob
 	@Column (name = "photo")
 	private byte[] photo;
+	
+	@ManyToMany
+	@JoinTable(
+			name = "Music",
+			joinColumns = @JoinColumn(name = "Playlist_id"),
+			inverseJoinColumns = @JoinColumn(name = "Music_id")
+			)
+	private List<Music> Music; 
 }
