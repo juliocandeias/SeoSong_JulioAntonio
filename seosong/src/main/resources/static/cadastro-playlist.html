@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Playlist - SeoSong</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f5f7;
+            color: #1f2937;
+        }
+
+        .container { width: 100%; max-width: 600px; }
+
+        .header { margin-bottom: 24px; }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .header p {
+            margin: 7px 0 0;
+            color: #6b7280;
+            font-size: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            box-shadow:
+                0 4px 6px rgba(0,0,0,.03),
+                0 10px 30px rgba(0,0,0,.06);
+        }
+
+        .form-group { margin-bottom: 18px; }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            height: 44px;
+            padding: 0 13px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            background: white;
+        }
+
+        input:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17,24,39,.08);
+        }
+
+        button {
+            width: 100%;
+            height: 46px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 8px;
+            background: #111827;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover { background: #374151; }
+        button:disabled { background: #9ca3af; cursor: not-allowed; }
+
+        .secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .secondary:hover { background: #d1d5db; }
+
+        .add-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .add-row button {
+            width: auto;
+            min-width: 130px;
+            margin-top: 0;
+        }
+
+        .songs {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .songs h2 {
+            margin: 0 0 12px;
+            font-size: 17px;
+            color: #111827;
+        }
+
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #f9fafb;
+            font-size: 14px;
+        }
+
+        .song-item button {
+            width: auto;
+            height: 34px;
+            margin: 0;
+            padding: 0 12px;
+            font-size: 13px;
+        }
+
+        #addSongSection {
+            display: none;
+            margin-top: 24px;
+        }
+
+        #message {
+            margin: 18px 0 0;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            display: none;
+        }
+
+        #message.success {
+            display: block;
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        #message.error {
+            display: block;
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .info {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        @media (max-width: 550px) {
+            .card { padding: 24px 20px; }
+            .header h1 { font-size: 26px; }
+            .add-row { grid-template-columns: 1fr; }
+            .add-row button { width: 100%; }
+        }
+    </style>
+    <link rel="stylesheet" href="app.css">
+    <script src="app-shell.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>Cadastro de Playlist</h1>
+        <p>Crie uma playlist e adicione músicas pelo ID.</p>
+    </div>
+
+    <div class="card">
+
+        <form id="playlistForm">
+
+            <div class="form-group">
+                <label for="name">Nome da playlist</label>
+                <input type="text" id="name" placeholder="Ex.: Minhas favoritas" required>
+            </div>
+
+            <div class="form-group">
+                <label for="userId">ID do usuário</label>
+                <input type="number" id="userId" placeholder="Ex.: 1" min="1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="photo">URL da foto</label>
+                <input type="url" id="photo" placeholder="https://exemplo.com/capa.jpg">
+            </div>
+
+            <button type="submit" id="createButton">
+                Criar playlist
+            </button>
+
+        </form>
+
+        <div id="addSongSection">
+
+            <div class="songs">
+
+                <h2>Adicionar músicas</h2>
+
+                <div class="add-row">
+
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="songId">ID da música</label>
+                        <input type="number" id="songId" placeholder="Ex.: 5" min="1">
+                    </div>
+
+                    <button type="button" id="addButton">
+                        + Adicionar
+                    </button>
+
+                </div>
+
+                <p class="info">
+                    A música precisa estar cadastrada no sistema.
+                </p>
+
+                <div id="songList"></div>
+
+            </div>
+
+        </div>
+
+        <p id="message"></p>
+
+    </div>
+
+</div>
+
+<script>
+    const playlistForm = document.getElementById("playlistForm");
+    const createButton = document.getElementById("createButton");
+    const addButton = document.getElementById("addButton");
+    const addSongSection = document.getElementById("addSongSection");
+    const songList = document.getElementById("songList");
+    const message = document.getElementById("message");
+
+    let playlistId = null;
+
+    playlistForm.addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        createButton.disabled = true;
+        createButton.textContent = "Criando...";
+
+        const playlist = {
+            name: document.getElementById("name").value,
+            user: {
+                id: Number(document.getElementById("userId").value)
+            },
+            photo: document.getElementById("photo").value
+        };
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8081/playlists",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(playlist)
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Erro ao criar playlist.");
+            }
+
+            const savedPlaylist = await response.json();
+
+            playlistId = savedPlaylist.id;
+
+            message.className = "success";
+            message.textContent =
+                "✓ Playlist criada com sucesso! ID: " + playlistId;
+
+            addSongSection.style.display = "block";
+
+            createButton.disabled = true;
+            createButton.textContent = "Playlist criada";
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.className = "error";
+            message.textContent =
+                "Não foi possível criar a playlist.";
+
+            createButton.disabled = false;
+            createButton.textContent = "Criar playlist";
+        }
+    });
+
+
+    addButton.addEventListener("click", async function() {
+
+        const songIdInput = document.getElementById("songId");
+        const songId = Number(songIdInput.value);
+
+        if (!songId || !playlistId) {
+            return;
+        }
+
+        addButton.disabled = true;
+        addButton.textContent = "Adicionando...";
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8080/playlists/"
+                + playlistId
+                + "/songs/"
+                + songId,
+                {
+                    method: "POST"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Erro ao adicionar música.");
+            }
+
+            const playlist = await response.json();
+
+            message.className = "success";
+            message.textContent =
+                "✓ Música " + songId + " adicionada à playlist!";
+
+            const item = document.createElement("div");
+            item.className = "song-item";
+
+            item.innerHTML =
+                "<span>🎵 Música ID: " + songId + "</span>" +
+                "<button type='button' class='secondary' " +
+                "onclick='removerMusica(" + songId + ", this)'>" +
+                "Remover</button>";
+
+            songList.appendChild(item);
+
+            songIdInput.value = "";
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.className = "error";
+            message.textContent =
+                "Não foi possível adicionar a música.";
+
+        }
+
+        addButton.disabled = false;
+        addButton.textContent = "+ Adicionar";
+    });
+
+
+    async function removerMusica(songId, button) {
+
+        button.disabled = true;
+        button.textContent = "Removendo...";
+
+        try {
+
+            const response = await fetch(
+                "http://localhost:8080/playlists/"
+                + playlistId
+                + "/songs/"
+                + songId,
+                {
+                    method: "DELETE"
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Erro ao remover música.");
+            }
+
+            button.parentElement.remove();
+
+            message.className = "success";
+            message.textContent =
+                "✓ Música removida da playlist.";
+
+        } catch (error) {
+
+            console.error(error);
+
+            message.className = "error";
+            message.textContent =
+                "Não foi possível remover a música.";
+
+            button.disabled = false;
+            button.textContent = "Remover";
+        }
+    }
+</script>
+
+</body>
+</html>
