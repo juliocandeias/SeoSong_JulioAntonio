@@ -2,7 +2,7 @@
     const page = window.location.pathname.split('/').pop() || 'listar.html';
     const links = [
         ['listar.html', 'Usuários'],
-        ['avaliar-musica.html', 'Avaliar música'],
+        ['musicas.html', 'Músicas'],
         ['cadastro-user.html', 'Novo usuário'],
         ['cadastro-artista.html', 'Novo artista'],
         ['cadastro-musica.html', 'Nova música'],
@@ -16,8 +16,8 @@
             <span class="brand-mark">♪</span> SeoSong
         </a>
         <div class="app-nav-links">
-            ${links.map(([href, label], index) => `
-                <a class="app-nav-link ${page === href ? 'active' : ''} ${index === 1 ? 'primary' : ''}" href="${href}">${label}</a>
+            ${links.map(([href, label]) => `
+                <a class="app-nav-link ${page === href ? 'active' : ''}" href="${href}">${label}</a>
             `).join('')}
         </div>
     `;

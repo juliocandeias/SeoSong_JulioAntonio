@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Músicas - SeoSong</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f5f7;
+            color: #1f2937;
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .title h1 { margin: 0; font-size: 30px; }
+        .title p { margin: 6px 0 0; color: #6b7280; }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 10px 16px;
+            background: #111827;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover { background: #374151; }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6b7280;
+            background: #f9fafb;
+        }
+
+        td { padding: 15px 20px; border-top: 1px solid #eeeeee; font-size: 14px; }
+        tr:hover td { background: #fafafa; }
+
+        .music { display: flex; align-items: center; gap: 12px; }
+
+        .cover {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+
+        .music-title { font-weight: 600; color: #111827; }
+        .music-artist { margin-top: 3px; color: #6b7280; font-size: 13px; }
+        .id { color: #6b7280; font-weight: 600; }
+        .album, .duration, .genre { color: #4b5563; }
+
+        .loading, .empty, .error { padding: 60px 20px; text-align: center; }
+        .loading, .empty { color: #6b7280; }
+        .error { color: #dc2626; }
+
+        @media (max-width: 800px) {
+            .container { padding: 25px 12px; }
+            th, td { padding: 12px; }
+            .hide-mobile { display: none; }
+        }
+    </style>
+
+    <link rel="stylesheet" href="app.css">
+    <script src="app-shell.js" defer></script>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="title">
+            <h1>Músicas</h1>
+            <p id="counter">Carregando...</p>
+        </div>
+
+        <button onclick="loadMusics()">↻ Atualizar</button>
+    </div>
+
+    <div class="card">
+        <div id="content" class="loading">Carregando músicas...</div>
+    </div>
+
+</div>
+
+<script>
+    const API_URL = "http://localhost:8081/songs";
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, c => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        }[c]));
+    }
+
+    function formatDuration(seconds) {
+        if (seconds == null || isNaN(seconds) || seconds <= 0) return "-";
+        const m = Math.floor(seconds / 60);
+        const s = String(Math.floor(seconds % 60)).padStart(2, "0");
+        return `${m}:${s}`;
+    }
+
+    async function loadMusics() {
+        const content = document.getElementById("content");
+        const counter = document.getElementById("counter");
+
+        content.className = "loading";
+        content.innerHTML = "Carregando músicas...";
+
+        try {
+            const response = await fetch(API_URL);
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const musics = await response.json();
+
+            renderMusics(musics);
+
+            counter.innerText =
+                `${musics.length} música${musics.length !== 1 ? "s" : ""} cadastrada${musics.length !== 1 ? "s" : ""}`;
+
+        } catch (error) {
+            console.error(error);
+            counter.innerText = "";
+            content.className = "error";
+            content.innerHTML = `
+                <strong>Erro ao carregar músicas</strong>
+                <br><br>
+                <small>${escapeHtml(error.message)}</small>
+            `;
+        }
+    }
+
+    function renderMusics(musics) {
+        const content = document.getElementById("content");
+
+        if (!musics || musics.length === 0) {
+            content.className = "empty";
+            content.innerHTML = "Nenhuma música cadastrada.";
+            return;
+        }
+
+        const rows = musics.map(music => {
+            const title = music.name || "Sem título";
+            // artist vem como objeto (Artist) no JSON, então pegamos o nome dele
+            const artist = (music.artist && music.artist.name) || "-";
+            const album = music.album || "-";
+            const genre = music.genre || "-";
+            const fallback = "https://ui-avatars.com/api/?name=" + encodeURIComponent(title);
+            const cover = music.photo || fallback;
+
+            return `
+                <tr>
+                    <td><span class="id">#${escapeHtml(music.id)}</span></td>
+
+                    <td>
+                        <div class="music">
+                            <img
+                                class="cover"
+                                src="${escapeHtml(cover)}"
+                                alt="${escapeHtml(title)}"
+                                onerror="this.onerror=null;this.src='${fallback}'"
+                            >
+                            <div>
+                                <div class="music-title">${escapeHtml(title)}</div>
+                                <div class="music-artist">${escapeHtml(artist)}</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="album hide-mobile">${escapeHtml(album)}</td>
+                    <td class="genre hide-mobile">${escapeHtml(genre)}</td>
+                    <td class="duration hide-mobile">${formatDuration(music.duration)}</td>
+                </tr>
+            `;
+        }).join("");
+
+        content.className = "";
+        content.innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Música</th>
+                        <th class="hide-mobile">Álbum</th>
+                        <th class="hide-mobile">Gênero</th>
+                        <th class="hide-mobile">Duração</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        `;
+    }
+
+    loadMusics();
+</script>
+
+</body>
+</html>
